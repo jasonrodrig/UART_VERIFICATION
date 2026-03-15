@@ -21,7 +21,7 @@ sync: stash pull status
 
 delete:
 	rm -rf ./src/covReport ./src/work 
-	rm ./src/wave.vcd ./src/coverage.ucdb 
+	rm ./src/wave.vcd ./src/coverage.ucdb ./src/waveform.wlf 
 	rm ./src/uart_tx_top.log ./src/simulation.log
 	#rm ./src/vsim.wlf ./src/vsim_stacktrace.vstf   
 	#rm transcript
