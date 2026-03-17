@@ -1,3 +1,4 @@
+`include "uart_tx_defines.sv"
 `include "uart_tx_design.v"
 `include "uart_tx_interface.sv"
 `include "uart_tx_packages.sv"
@@ -10,7 +11,7 @@ import uart_tx_pkg::*;
 module top;
 
 	// Clock frequency in Hz
-	parameter real CLK_FREQUENCY = 50_000_000.0;
+	parameter real CLK_FREQUENCY = `SET_CLK;
 
   // Half clock period in ns
   parameter real HALF_PERIOD = 1e9 / ( 2.0 * CLK_FREQUENCY );
@@ -41,9 +42,9 @@ module top;
 		$dumpvars;
 	end
  
-	initial begin
+ initial begin
    reset_n = 0;
-	 @(posedge clock);
+	 repeat(1) @(posedge clock);
    reset_n = 1;
 	end
 
@@ -51,7 +52,7 @@ module top;
   //  run_test("uart_tx_reset_test");
 	//  run_test("uart_tx_transfer_test");
  	  run_test("uart_tx_base_test");
-		#1000000 $finish;
+		#1000000000 $finish;
 	end
 
 endmodule

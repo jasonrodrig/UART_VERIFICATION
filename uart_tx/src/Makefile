@@ -6,6 +6,9 @@ SHELL := /bin/csh
 .SILENT:
 	make main
 
+.IGNORE:
+	main
+
 all: 
 	make main 
 	
@@ -45,7 +48,9 @@ compile_log_err:
 	echo "-----------------------------------------------------------------"
 	echo "------------------- Compilation Report --------------------------"
 	echo ""
-	grep "^Errors" uart_tx_top.log
+	grep -i "Errors" uart_tx_top.log
+	echo ""
+	grep -m1 "^Errors" uart_tx_top.log 
 	echo ""
 	echo "Log file path: uart_tx_top.log"
 	echo ""
@@ -65,7 +70,7 @@ simulate_log_err:
 	grep "ERROR" simulation.log || echo "No UVM_ERROR"
 	echo ""
 	echo "UVM Warnings"
-	grep "WARN" simulation.log || echo "No UVM_WARNING"
+	grep "WARNING" simulation.log || echo "No UVM_WARNING"
 	echo ""
 	echo "Waveform: vsim -view waveform.wlf &"
 	echo "------------------------------------------------------------"

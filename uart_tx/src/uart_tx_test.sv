@@ -32,6 +32,7 @@ task uart_tx_base_test::run_phase(uvm_phase phase);
 	phase.raise_objection(this);
 	seq.start(env.agt.seqr);
 	// phase.phase_done.set_drain_time(this, 20);
+  //#1ms;
 	phase.drop_objection(this);
 endtask
 

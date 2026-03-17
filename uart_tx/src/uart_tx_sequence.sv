@@ -14,15 +14,10 @@ endfunction
 task uart_tx_sequence::body();
 	repeat(1)begin
 		req = uart_tx_sequence_item::type_id::create("req");
-		`uvm_do(req)
-		req.print();
-		//wait_for_grant();
-    
-		//if(!req.randomize());
-		// `uvm_error("SEQ", "Randomization failed")
+		`uvm_do_with(req,{ req.baud_rate == 2 ; })
+		//`uvm_do_with(req,{ req.baud_rate == 3 ; })
 		
-		//send_request(req);
-		//wait_for_item_done();
+
 	end
 endtask
 

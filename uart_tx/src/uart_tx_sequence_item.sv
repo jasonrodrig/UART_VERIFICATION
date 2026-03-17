@@ -6,6 +6,7 @@ class uart_tx_sequence_item extends uvm_sequence_item;
 	bit data_tx , active_flag , done_flag , baud_clk_sig;
 
 	`uvm_object_utils_begin(uart_tx_sequence_item)
+	//`uvm_field_int(reset_n,UVM_ALL_ON)
 	`uvm_field_int(send,UVM_ALL_ON)
 	`uvm_field_int(parity_type,UVM_ALL_ON)
 	`uvm_field_int(baud_rate,UVM_ALL_ON)
@@ -17,7 +18,9 @@ class uart_tx_sequence_item extends uvm_sequence_item;
 	`uvm_object_utils_end
 
 	extern function new(string name = "uart_tx_sequence_item");
-
+  
+	constraint c {  send == 1 ; parity_type inside { [ 1 : 2 ] } ; }
+	 
 endclass
 
 function uart_tx_sequence_item::new(string name = "uart_tx_sequence_item");
