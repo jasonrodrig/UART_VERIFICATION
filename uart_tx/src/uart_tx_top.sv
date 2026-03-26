@@ -17,11 +17,11 @@ module top;
   parameter real HALF_PERIOD = 1e9 / ( 2.0 * CLK_FREQUENCY );
 
 	bit clock = 0;
-	bit reset_n = 1;
+//	bit reset_n = 1;
 
 	always #(HALF_PERIOD) clock = ~clock;
   
-	uart_tx_interface vif(clock,reset_n);
+	uart_tx_interface vif(clock);
 
 	TxUnit DUT(
 		.clock(vif.clock),
@@ -40,12 +40,6 @@ module top;
 		uvm_config_db#(virtual uart_tx_interface)::set(null,"*","vif",vif);
 		$dumpfile("wave.vcd");
 		$dumpvars;
-	end
- 
- initial begin
-   reset_n = 0;
-	 repeat(1) @(posedge clock);
-   reset_n = 1;
 	end
 
 	initial begin 

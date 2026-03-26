@@ -12,12 +12,16 @@ function uart_tx_sequence::new(string name = "uart_tx_sequence");
 endfunction
 
 task uart_tx_sequence::body();
-	repeat(1)begin
+	repeat(2)begin
 		req = uart_tx_sequence_item::type_id::create("req");
-		`uvm_do_with(req,{ req.baud_rate == 2 ; })
-		//`uvm_do_with(req,{ req.baud_rate == 3 ; })
-		
-
+		`uvm_do_with(req,{ req.reset_n == 0 ; req.baud_rate == 2 ; } )
+		`uvm_do_with(req,{ req.reset_n == 1 ; req.baud_rate == 2 ; } )
+		`uvm_do_with(req,{ req.reset_n == 0 ; req.baud_rate == 3 ; } )
+		`uvm_do_with(req,{ req.reset_n == 1 ; req.baud_rate == 3 ; } )
+    `uvm_do_with(req,{ req.reset_n == 0 ; req.baud_rate == 1 ; } )
+		`uvm_do_with(req,{ req.reset_n == 1 ; req.baud_rate == 1 ; } )
+		`uvm_do_with(req,{ req.reset_n == 0 ; req.baud_rate == 0 ; } )
+		`uvm_do_with(req,{ req.reset_n == 1 ; req.baud_rate == 0 ; } )
 	end
 endtask
 
