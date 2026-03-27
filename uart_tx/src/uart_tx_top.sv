@@ -1,7 +1,7 @@
 `include "uart_tx_defines.sv"
-`include "uart_tx_design.v"
-`include "uart_tx_interface.sv"
-`include "uart_tx_packages.sv"
+`include "design/uart_tx_design.v"
+`include "testbench/uart_tx_interface.sv"
+`include "testbench/uart_tx_packages.sv"
 
 import uvm_pkg::*;
 import uart_tx_pkg::*;
