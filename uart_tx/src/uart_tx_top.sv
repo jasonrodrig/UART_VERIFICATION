@@ -32,8 +32,7 @@ module top;
 		.data_in(vif.data_in),
 		.data_tx(vif.data_tx),
 		.active_flag(vif.active_flag),
-    .done_flag(vif.done_flag),
-    .baud_clk_sig(vif.baud_clk_sig)
+    .done_flag(vif.done_flag)
 	);
 
 	initial begin 
@@ -43,10 +42,15 @@ module top;
 	end
 
 	initial begin 
-  //  run_test("uart_tx_reset_test");
-	//  run_test("uart_tx_transfer_test");
- 	  run_test("uart_tx_base_test");
-		#1000000000 $finish;
+		//run_test("uart_tx_base_test");
+		//run_test("uart_tx_baud_rate_2400_test");    
+		//run_test("uart_tx_baud_rate_4800_test");     
+		//run_test("uart_tx_baud_rate_9600_test");       
+		//run_test("uart_tx_baud_rate_19200_test");   
+		//run_test("uart_tx_send0_first_test");        
+		//run_test("uart_tx_mid_transfer_send0_test");  
+		run_test("uart_tx_regression_test");
+		#1000000000 ; $finish;
 	end
 
 endmodule

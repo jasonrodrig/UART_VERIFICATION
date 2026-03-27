@@ -1,8 +1,15 @@
 `include "uvm_macros.svh"
 package uart_tx_pkg;
 	import uvm_pkg::*;
+
 	`include "uart_tx_sequence_item.sv"
-	`include "uart_tx_sequence.sv"
+  `include "sequence/uart_tx_baud_rate_2400_sequence.sv"
+  `include "sequence/uart_tx_baud_rate_4800_sequence.sv"
+  `include "sequence/uart_tx_baud_rate_9600_sequence.sv"
+  `include "sequence/uart_tx_baud_rate_19200_sequence.sv"
+  `include "sequence/uart_tx_send0_first_sequence.sv"
+  `include "sequence/uart_tx_mid_transfer_send0_sequence.sv"
+	`include "sequence/uart_tx_regression_sequence.sv"
 	`include "uart_tx_report_server.sv"
 	`include "uart_tx_sequencer.sv"
 	`include "uart_tx_driver.sv"
@@ -11,5 +18,13 @@ package uart_tx_pkg;
 	`include "uart_tx_subscriber.sv"
 	`include "uart_tx_scoreboard.sv"
 	`include "uart_tx_environment.sv"
-	`include "uart_tx_test.sv"
+	`include "test/uart_tx_base_test.sv"
+	`include "test/uart_tx_baud_rate_2400_test.sv"
+	`include "test/uart_tx_baud_rate_4800_test.sv"
+	`include "test/uart_tx_baud_rate_9600_test.sv"
+	`include "test/uart_tx_baud_rate_19200_test.sv"
+	`include "test/uart_tx_send0_first_test.sv"
+	`include "test/uart_tx_mid_transfer_send0_test.sv"
+	`include "test/uart_tx_regression_test.sv"
+
 endpackage

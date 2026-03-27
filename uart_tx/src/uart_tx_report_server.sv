@@ -19,16 +19,15 @@ class uart_tx_report_server extends uvm_report_server;
 		string sev_color, sev_label,composed;
 
 		case(severity)
-			UVM_INFO:    begin sev_color = GREEN;   sev_label = "[INFO] ";  end
-			UVM_WARNING: begin sev_color = YELLOW;  sev_label = "[WARN] ";  end
-			UVM_ERROR:   begin sev_color = RED;     sev_label = "[ERROR] "; end
-			UVM_FATAL:   begin sev_color = MAGENTA; sev_label = "[FATAL] "; end
-			default:     begin sev_color = RESET;   sev_label = "[MSG] ";   end
+			UVM_INFO:    begin sev_color = GREEN;   sev_label = "[INFO]";  end
+			UVM_WARNING: begin sev_color = YELLOW;  sev_label = "[WARN]";  end
+			UVM_ERROR:   begin sev_color = RED;     sev_label = "[ERROR]"; end
+			UVM_FATAL:   begin sev_color = MAGENTA; sev_label = "[FATAL]"; end
+			default:     begin sev_color = RESET;   sev_label = "[MSG]";   end
 		endcase
 
-		composed = $sformatf("%s%s%s %s(ID=%s)%s %s[time = %0t]%s %s", sev_color, sev_label, RESET, CYAN, id, RESET, BLUE, $time, RESET, message);
+		composed = $sformatf("%s%-5s%s %s(ID=%-18s)%s %s[time = %0t]%s %s", sev_color, sev_label, RESET, CYAN, id, RESET, BLUE, $time, RESET, message);
 		return composed;
-
 	endfunction
 
 endclass

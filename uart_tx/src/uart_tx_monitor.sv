@@ -41,7 +41,6 @@ task uart_tx_monitor::interf();
 	seq.data_tx = vif.uart_tx_monitor_cb.data_tx;
 	seq.active_flag = vif.uart_tx_monitor_cb.active_flag;
 	seq.done_flag = vif.uart_tx_monitor_cb.done_flag;
-	seq.baud_clk_sig = vif.uart_tx_monitor_cb.baud_clk_sig;
 endtask
 
 task uart_tx_monitor::uart_tx_monitor_code();
@@ -56,108 +55,45 @@ task uart_tx_monitor::uart_tx_monitor_code();
 		default: target_count = 0;
 	endcase		
 
-	/*	
-	if(!vif.uart_tx_monitor_cb.reset_n && !reset_found) begin
-
-	//	$display("reset is monitored waiting to get completed at %0t",$time);
-	//	repeat( target_count ) @(vif.uart_tx_monitor_cb);
-	//  $display("monitor reset waiting is completed at %0t",$time);
-
-	repeat(1)@(vif.uart_tx_monitor_cb);
-
-	seq.reset_n = vif.uart_tx_monitor_cb.reset_n;
-	seq.send = vif.uart_tx_monitor_cb.send;
-	seq.parity_type = vif.uart_tx_monitor_cb.parity_type;
-	seq.baud_rate = vif.uart_tx_monitor_cb.baud_rate;
-	seq.data_in = vif.uart_tx_monitor_cb.data_in;
-	seq.data_tx = vif.uart_tx_monitor_cb.data_tx;
-	seq.active_flag = vif.uart_tx_monitor_cb.active_flag;
-	seq.done_flag = vif.uart_tx_monitor_cb.done_flag;
-	seq.baud_clk_sig = vif.uart_tx_monitor_cb.baud_clk_sig;
-
-	`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | BAUD_CLK_SIG = %0B " , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag , vif.uart_tx_monitor_cb.baud_clk_sig ) , UVM_NONE )
-	reset_found = 1;
-	monitor_id++;
-	$display("monitor_id = %0d",monitor_id);
-
-	mon_port.write(seq);
-	//repeat(1)@(vif.uart_tx_monitor_cb);
-
-	//wait(vif.uart_tx_monitor_cb.reset_n) 
-	//$display("reset aplied at time %t",$time );      
-	//if(vif.uart_tx_monitor_cb.reset_n && reset_found )
-	if( reset_found )
-	begin
-	repeat( target_count / 4 ) @(vif.uart_tx_monitor_cb); 
-	$display("momnitor reset delay");
-	reset_found = 0;
-	monitor_id++;
-	$display("monitor_id = %0d",monitor_id);
-	`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | BAUD_CLK_SIG = %0B " , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag , vif.uart_tx_monitor_cb.baud_clk_sig ) , UVM_NONE )
-
-	mon_port.write(seq);
-		end
-	end
-
-	// driving it 13 times since at start it takes the reset signal to monitor initially then followed by 11 bits to send one packet frame and final one extra monitor cycle check to complete the transmission
-	else begin
-
-	repeat(14) begin  
-
-	repeat( target_count ) @(vif.uart_tx_monitor_cb); // generation of 1 baud clk_cycle delay 
-
-	seq.reset_n = vif.uart_tx_monitor_cb.reset_n;
-	seq.send = vif.uart_tx_monitor_cb.send;
-	seq.parity_type = vif.uart_tx_monitor_cb.parity_type;
-	seq.baud_rate = vif.uart_tx_monitor_cb.baud_rate;
-	seq.data_in = vif.uart_tx_monitor_cb.data_in;
-	seq.data_tx = vif.uart_tx_monitor_cb.data_tx;
-	seq.active_flag = vif.uart_tx_monitor_cb.active_flag;
-	seq.done_flag = vif.uart_tx_monitor_cb.done_flag;
-	seq.baud_clk_sig = vif.uart_tx_monitor_cb.baud_clk_sig;
-
-	//	`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | BAUD_CLK_SIG = %0B " , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag , vif.uart_tx_monitor_cb.baud_clk_sig ) , UVM_NONE )
-
-	`uvm_info( get_type_name() , $sformatf(" SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | BAUD_CLK_SIG = %0B " , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag , vif.uart_tx_monitor_cb.baud_clk_sig ) , UVM_NONE )
-
-
-	mon_port.write(seq);
-	$display("monitor_id = %0d",monitor_id);
-	monitor_id++;
-
-		end
-	end
-
-endtask
-	*/
-	//###########################################################################################################################################/
 	if( !vif.uart_tx_monitor_cb.reset_n ) 
 	begin
 		repeat(1) @(vif.uart_tx_monitor_cb);  
 		interf();
 		reset_found = 1;
 		if ( reset_found && !temp ) begin
-		mon_port.write(seq);
-		temp = 1;
-		reset_found = 0;
-		
-		$display("monitor_id = %0d",monitor_id);
-		monitor_id++;
-		//seq.reset_n = 0;
-		`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | BAUD_CLK_SIG = %0B " , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag , vif.uart_tx_monitor_cb.baud_clk_sig ) , UVM_NONE )
+			mon_port.write(seq);
+			temp = 1;
+			reset_found = 0;
+			//$display("monitor_id = %0d",monitor_id);
+			monitor_id++;
+			//`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B |" , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag ) , UVM_NONE )
 		end
 	end
 
-	else begin
-		repeat(14) begin  
-			repeat( target_count  ) @(vif.uart_tx_monitor_cb); // generation of 1 baud clk_cycle delay 
-			interf();	
-			$display("monitor_id = %0d",monitor_id);
-			monitor_id++;
-      if( monitor_id == 14 ) monitor_id = 0;
-			`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | BAUD_CLK_SIG = %0B " , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag , vif.uart_tx_monitor_cb.baud_clk_sig ) , UVM_NONE )
+	else if( vif.uart_tx_monitor_cb.reset_n && !vif.uart_tx_monitor_cb.send)
+	begin
+		//$display("send 0 condition at monitor");
+		repeat( target_count ) @(vif.uart_tx_monitor_cb); // generation of 1 baud clk_cycle delay 
+		//$display("send 0 condition at monitor");
+		interf();	
+		//$display("monitor_id = %0d",monitor_id);
+		monitor_id++;
+		seq.send = 0;
+		if( monitor_id == 14 ) monitor_id = 0;
+		//`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | " , vif.uart_tx_monitor_cb.reset_n , !vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag ) , UVM_NONE )
 		mon_port.write(seq);
-		end
+	end
+
+	else begin
+
+		repeat( target_count  ) @(vif.uart_tx_monitor_cb); // generation of 1 baud clk_cycle delay 
+		interf();	
+		//  $display("monitor_id = %0d",monitor_id);
+		monitor_id++;
+		seq.send = 1;
+		if( monitor_id == 14 ) monitor_id = 0;
+		//	`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | " , vif.uart_tx_monitor_cb.reset_n , seq.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag )  , UVM_NONE )
+		mon_port.write(seq);
 	end
 
 endtask

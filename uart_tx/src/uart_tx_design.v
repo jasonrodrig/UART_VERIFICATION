@@ -8,15 +8,12 @@ module TxUnit(
 
 	output        data_tx,             //  Serial transmitter's data out.
 	output        active_flag,         //  high when Tx is transmitting, low when idle.
-	output        done_flag,            //  high when transmission is done, low when active.
-	output        baud_clk_sig
+	output        done_flag            //  high when transmission is done, low when active.
 );
 
 	//  Interconnections
 	wire parity_bit_w;
 	wire baud_clk_w;
-
-	assign baud_clk_sig = baud_clk_w;
 
 	//  Baud generator unit instantiation
 	BaudGenT Unit1(

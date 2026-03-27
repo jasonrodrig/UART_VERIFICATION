@@ -2,7 +2,7 @@ class uart_tx_driver extends uvm_driver #(uart_tx_sequence_item);
 
 	`uvm_component_utils(uart_tx_driver)
 	virtual uart_tx_interface.DRIVER vif;
-	int target_count, driver_id = 0 , reset_found = 0;
+	int target_count, driver_id = 0 ;
 
 	extern function new (string name = "uart_tx_driver", uvm_component parent);
 	extern function void build_phase(uvm_phase phase);
@@ -49,90 +49,35 @@ task uart_tx_driver::uart_tx_driver_code();
 		3: target_count = `SET_CLK / 19200;  // 'd 2_604;
 		default: target_count = 0;
 	endcase		
-	/*
-	if( !req.reset_n  && !reset_found ) begin
-	vif.uart_tx_driver_cb.reset_n <= req.reset_n;
-	vif.uart_tx_driver_cb.send <= req.send;
-	vif.uart_tx_driver_cb.parity_type <= req.parity_type;
-	vif.uart_tx_driver_cb.baud_rate <= req.baud_rate;
-	vif.uart_tx_driver_cb.data_in <= req.data_in;
-	`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " ,
-	req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )	
 
-	//$display("reset is driven waiting to get completed at %0t",$time);
-	//repeat( target_count ) @(vif.uart_tx_driver_cb);
-	//$display("driver reset waiting is completed at %0t",$time);
-	reset_found = 1;
-	driver_id++;
-	$display("driver_id = %0d",driver_id);			
-	repeat(1) @(vif.uart_tx_driver_cb);
-	//vif.uart_tx_driver_cb.reset_n <= 1'b1;
-	//repeat(1) @(vif.uart_tx_driver_cb);
-
-	if( reset_found )
-	begin
-	repeat( target_count ) @(vif.uart_tx_driver_cb);  
-	reset_found = 0;
-	driver_id++;
-	$display("delay reset driver");
-	$display("driver_id = %0d",driver_id);			
-	`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " ,
-	req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
-		end
-	end
-
-	*/
-
-	// driving it 13 times since at start it takes the reset signal to drive initially then followed by 11 bits to send one packet frame and final one extra drive to complete the transmission
-	/*
-	else begin
-	repeat(14) begin 
-
-	vif.uart_tx_driver_cb.reset_n <= req.reset_n;	
-	vif.uart_tx_driver_cb.send <=  req.send;
-	vif.uart_tx_driver_cb.parity_type <= req.parity_type;
-	vif.uart_tx_driver_cb.baud_rate <= req.baud_rate;
-	vif.uart_tx_driver_cb.data_in <= req.data_in;
-
-	repeat(target_count) @(vif.uart_tx_driver_cb); // generation of 1 baud_clk cycle delay
-
-	`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " ,
-	req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
-
-	//	`uvm_info( get_type_name() , $sformatf(" SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " ,
-	//	    req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
-
-	$display("driver_id = %0d",driver_id);
-	driver_id++;
-		end
-
-		end
-	*/
-
-//############################################################################################################################
 	if(!req.reset_n)
 	begin
 		interf();
 		repeat(1) @(vif.uart_tx_driver_cb);
 		driver_id = 0;
-		$display("driver_id = %0d",driver_id);
+		//		$display("driver_id = %0d",driver_id);
 		driver_id++;
-
-		`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " ,
-			req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
+		//		`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " , req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
 	end
-	else begin
-		repeat(14) begin
-			interf();
-			repeat(target_count) @(vif.uart_tx_driver_cb); // generation of 1 baud_clk cycle delay
 
-		$display("driver_id = %0d",driver_id);
-       driver_id++ ;	
-			`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " ,
-				req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
-			//end
-		end
+	else if( req.reset_n && !req.send )
+	begin
+		interf();
+		repeat(target_count) @(vif.uart_tx_driver_cb); // generation of 1 baud_clk cycle delay
+		//		$display("driver_id = %0d",driver_id);
+		driver_id++ ;	
+		//		`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " , req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
 	end
+
+	else
+	begin
+		interf();
+		repeat(target_count) @(vif.uart_tx_driver_cb); // generation of 1 baud_clk cycle delay
+		//		$display("driver_id = %0d",driver_id);
+		driver_id++ ;	
+		//		`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D " , req.reset_n , req.send , req.parity_type , req.baud_rate , req.data_in ) , UVM_NONE )
+	end
+
 endtask
 
 

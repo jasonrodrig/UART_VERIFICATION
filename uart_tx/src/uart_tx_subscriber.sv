@@ -7,6 +7,10 @@ class uart_tx_subscriber extends uvm_subscriber #(uart_tx_sequence_item);
 	covergroup uart_tx_coverage;
 		option.per_instance = 1;
 
+		RESET_N: coverpoint cov.reset_n{ 
+			bins reset_n_cp[] = {0,1};
+		}
+
 		SEND: coverpoint cov.send{ 
 			bins send_cp[] = {0,1};
 		}
@@ -41,7 +45,12 @@ class uart_tx_subscriber extends uvm_subscriber #(uart_tx_sequence_item);
 		DONE_FLAG: coverpoint cov.done_flag{ 
 			bins done_flag_cp[] = {0,1};
 		}
+    
+		cross SEND , RESET_N ;
+    cross BAUD_RATE, SEND;
+		cross SEND , PARITY_TYPE;
 
+		
 	endgroup
 
 	extern function new(string name = "uart_tx_subscriber", uvm_component parent );
