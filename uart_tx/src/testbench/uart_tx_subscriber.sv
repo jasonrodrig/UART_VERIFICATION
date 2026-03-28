@@ -46,10 +46,9 @@ class uart_tx_subscriber extends uvm_subscriber #(uart_tx_sequence_item);
 			bins done_flag_cp[] = {0,1};
 		}
     
-		cross SEND , RESET_N ;
-    cross BAUD_RATE, SEND;
-		cross SEND , PARITY_TYPE;
-
+		SENDXRESET_N:      cross SEND , RESET_N ;
+    SENDXBAUD_RATE:    cross SEND , BAUD_RATE;
+		SENDXPARITY_TYPE:  cross SEND , PARITY_TYPE;
 		
 	endgroup
 

@@ -2,6 +2,7 @@
 `include "design/uart_tx_design.v"
 `include "testbench/uart_tx_interface.sv"
 `include "testbench/uart_tx_packages.sv"
+`include "testbench/uart_tx_assertions.sv"
 
 import uvm_pkg::*;
 import uart_tx_pkg::*;
@@ -17,13 +18,24 @@ module top;
   parameter real HALF_PERIOD = 1e9 / ( 2.0 * CLK_FREQUENCY );
 
 	bit clock = 0;
-//	bit reset_n = 1;
 
 	always #(HALF_PERIOD) clock = ~clock;
   
 	uart_tx_interface vif(clock);
 
 	TxUnit DUT(
+		.clock(vif.clock),
+		.reset_n(vif.reset_n),
+		.send(vif.send),
+		.parity_type(vif.parity_type),
+		.baud_rate(vif.baud_rate),
+		.data_in(vif.data_in),
+		.data_tx(vif.data_tx),
+		.active_flag(vif.active_flag),
+    .done_flag(vif.done_flag)
+	);
+
+	 bind vif uart_tx_assertions ASSERT(
 		.clock(vif.clock),
 		.reset_n(vif.reset_n),
 		.send(vif.send),

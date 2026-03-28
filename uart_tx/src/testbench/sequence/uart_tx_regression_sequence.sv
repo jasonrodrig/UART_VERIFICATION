@@ -20,12 +20,12 @@ endfunction
 
 task uart_tx_regression_sequence::body();
    repeat(1) begin
-		`uvm_do(seq1)
-		`uvm_do(seq2)
 		`uvm_do(seq3)
 		`uvm_do(seq4)
+		`uvm_do(seq1)
+		`uvm_do(seq2)
 	  `uvm_do(seq5)
-		`uvm_do(seq6)
+		`uvm_do(seq6) 
    end
 endtask
 

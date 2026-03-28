@@ -66,7 +66,7 @@ task uart_tx_monitor::uart_tx_monitor_code();
 			reset_found = 0;
 			//$display("monitor_id = %0d",monitor_id);
 			monitor_id++;
-			//`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B |" , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag ) , UVM_NONE )
+			// `uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B |" , vif.uart_tx_monitor_cb.reset_n , vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag ) , UVM_NONE )
 		end
 	end
 
@@ -80,7 +80,7 @@ task uart_tx_monitor::uart_tx_monitor_code();
 		monitor_id++;
 		seq.send = 0;
 		if( monitor_id == 14 ) monitor_id = 0;
-		//`uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | " , vif.uart_tx_monitor_cb.reset_n , !vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag ) , UVM_NONE )
+		// `uvm_info( get_type_name() , $sformatf(" RESET = %0B | SEND = %0B | PARITY_TYPE = %0D | BAUD_RATE = %0D | DATA_IN = %0D | DATA_TX = %0B | ACTIVE_FLAG = %0B | DONE_FLAG = %0B | " , vif.uart_tx_monitor_cb.reset_n , !vif.uart_tx_monitor_cb.send , vif.uart_tx_monitor_cb.parity_type , vif.uart_tx_monitor_cb.baud_rate , vif.uart_tx_monitor_cb.data_in , vif.uart_tx_monitor_cb.data_tx , vif.uart_tx_monitor_cb.active_flag , vif.uart_tx_monitor_cb.done_flag ) , UVM_NONE )
 		mon_port.write(seq);
 	end
 
